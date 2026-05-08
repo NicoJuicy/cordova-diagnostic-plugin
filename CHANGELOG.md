@@ -1,5 +1,10 @@
 # CHANGELOG
 
+**v7.3.0**
+* (ios & android) feat: add `isLowPowerModeEnabled()` and `onLowPowerModeChange()` to core module to check if low power mode is enabled on the device.
+* (android) feat: add `isIgnoringBatteryOptimizations()` and `requestIgnoreBatteryOptimizations()` to core module to check if the app is ignoring battery optimizations and request to be added to the ignore list.
+
+
 **v7.2.10**
 (ios) feat: support optional specification of desired location accuracy when requesting location accuracy permission.
 

@@ -1217,7 +1217,7 @@ Platforms: Android
 
 Prompts the user to allow the app to ignore battery optimizations.
 
-Requires permission `<uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />`, which this plugin adds to the Android manifest.
+Requires permission `<uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />`, which needs to be added to the app's Android manifest.
 
     cordova.plugins.diagnostic.requestIgnoreBatteryOptimizations(successCallback, errorCallback);
 

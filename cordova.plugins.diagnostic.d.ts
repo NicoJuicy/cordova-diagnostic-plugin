@@ -761,6 +761,28 @@ interface Diagnostic {
 
     /**
      * ANDROID ONLY
+     * Checks if the app is currently ignoring battery optimizations.
+     * @param successCallback
+     * @param errorCallback
+     */
+    isIgnoringBatteryOptimizations?: (
+        successCallback: (enabled: boolean) => void,
+        errorCallback: (error: string) => void
+    ) => void;
+
+    /**
+     * ANDROID ONLY
+     * Prompts the user to allow the app to ignore battery optimizations.
+     * @param successCallback
+     * @param errorCallback
+     */
+    requestIgnoreBatteryOptimizations?: (
+        successCallback: () => void,
+        errorCallback: (error: string) => void
+    ) => void;
+
+    /**
+     * ANDROID ONLY
      * Checks if high-accuracy locations are available to the app from GPS hardware.
      * Returns true if Location mode is enabled and is set to "Device only" or "High accuracy" AND if the app is authorised to use location.
      * @param successCallback

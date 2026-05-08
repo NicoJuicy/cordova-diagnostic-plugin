@@ -378,6 +378,11 @@ public class Diagnostic extends CordovaPlugin{
                 callbackContext.success(getCurrentBatteryLevel());
             } else if(action.equals("isLowPowerModeEnabled")) {
                 callbackContext.success(isLowPowerModeEnabled() ? 1 : 0);
+            } else if(action.equals("isIgnoringBatteryOptimizations")) {
+                callbackContext.success(isIgnoringBatteryOptimizations() ? 1 : 0);
+            } else if(action.equals("requestIgnoreBatteryOptimizations")) {
+                requestIgnoreBatteryOptimizations();
+                callbackContext.success();
             } else if(action.equals("isAirplaneModeEnabled")) {
                 callbackContext.success(isAirplaneModeEnabled() ? 1 : 0);
             } else if(action.equals("getDeviceOSVersion")) {
@@ -997,6 +1002,24 @@ public class Diagnostic extends CordovaPlugin{
         }
         PowerManager powerManager = (PowerManager) cordova.getContext().getApplicationContext().getSystemService(Context.POWER_SERVICE);
         return powerManager != null && powerManager.isPowerSaveMode();
+    }
+
+    protected boolean isIgnoringBatteryOptimizations(){
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            return true;
+        }
+        PowerManager powerManager = (PowerManager) cordova.getContext().getApplicationContext().getSystemService(Context.POWER_SERVICE);
+        return powerManager != null && powerManager.isIgnoringBatteryOptimizations(cordova.getActivity().getPackageName());
+    }
+
+    protected void requestIgnoreBatteryOptimizations(){
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || isIgnoringBatteryOptimizations()){
+            return;
+        }
+
+        Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+        intent.setData(Uri.parse("package:" + cordova.getActivity().getPackageName()));
+        cordova.getActivity().startActivity(intent);
     }
 
     protected void notifyLowPowerModeChange(){

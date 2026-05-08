@@ -502,6 +502,37 @@ var Diagnostic = (function(){
     };
 
     /**
+     * Checks if the app is currently ignoring battery optimizations.
+     *
+     * @param {Function} successCallback -  The callback which will be called when the operation is successful.
+     * This callback function is passed a single boolean parameter which is TRUE if the app is ignoring battery optimizations.
+     * @param {Function} errorCallback -  The callback which will be called when the operation encounters an error.
+     *  This callback function is passed a single string parameter containing the error message.
+     */
+    Diagnostic.isIgnoringBatteryOptimizations = function(successCallback, errorCallback){
+        return cordova.exec(Diagnostic._ensureBoolean(successCallback),
+            errorCallback,
+            'Diagnostic',
+            'isIgnoringBatteryOptimizations',
+            []);
+    };
+
+    /**
+     * Prompts the user to allow the app to ignore battery optimizations.
+     *
+     * @param {Function} successCallback - The callback which will be called when the request intent is opened.
+     * @param {Function} errorCallback - The callback which will be called when the operation encounters an error.
+     * This callback function is passed a single string parameter containing the error message.
+     */
+    Diagnostic.requestIgnoreBatteryOptimizations = function(successCallback, errorCallback){
+        return cordova.exec(successCallback,
+            errorCallback,
+            'Diagnostic',
+            'requestIgnoreBatteryOptimizations',
+            []);
+    };
+
+    /**
      * Registers a function to be called when the device low power mode changes.
      *
      * @param {Function} successCallback - The callback which will be called when low power mode changes.

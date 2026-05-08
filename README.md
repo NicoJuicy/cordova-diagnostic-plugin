@@ -80,6 +80,8 @@ Cordova diagnostic plugin [![Latest Stable Version](https://img.shields.io/npm/v
       - [Example usage](#example-usage-16)
         - [isLowPowerModeEnabled()](#islowpowermodeenabled)
         - [onLowPowerModeChange()](#onlowpowermodechange)
+        - [isIgnoringBatteryOptimizations()](#isignoringbatteryoptimizations)
+        - [requestIgnoreBatteryOptimizations()](#requestignorebatteryoptimizations)
     - [isAirplaneModeEnabled()](#isairplanemodeenabled)
             - [Parameters](#parameters-15)
             - [Example usage](#example-usage-17)
@@ -1184,6 +1186,53 @@ The function is passed a single boolean parameter which is TRUE if low power mod
 
     cordova.plugins.diagnostic.onLowPowerModeChange(function(enabled){
         console.log(`Low power mode changed: ${enabled ? 'enabled' : 'disabled'}`);
+    });
+
+### isIgnoringBatteryOptimizations()
+
+Platforms: Android
+
+Checks if the app is currently ignoring battery optimizations.
+
+    cordova.plugins.diagnostic.isIgnoringBatteryOptimizations(successCallback, errorCallback);
+
+#### Parameters
+
+- {Function} successCallback -  The callback which will be called when operation is successful.
+The function is passed a single boolean parameter which is TRUE if the app is ignoring battery optimizations.
+- {Function} errorCallback -  The callback which will be called when operation encounters an error.
+The function is passed a single string parameter containing the error message.
+
+#### Example usage
+
+    cordova.plugins.diagnostic.isIgnoringBatteryOptimizations(function(enabled){
+        console.log(`Ignoring battery optimizations: ${enabled ? 'yes' : 'no'}`);
+    }, function(error){
+        console.error("The following error occurred: "+error);
+    });
+
+### requestIgnoreBatteryOptimizations()
+
+Platforms: Android
+
+Prompts the user to allow the app to ignore battery optimizations.
+
+Requires permission `<uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />`, which this plugin adds to the Android manifest.
+
+    cordova.plugins.diagnostic.requestIgnoreBatteryOptimizations(successCallback, errorCallback);
+
+#### Parameters
+
+- {Function} successCallback -  The callback which will be called when the system request UI is opened.
+- {Function} errorCallback -  The callback which will be called when operation encounters an error.
+The function is passed a single string parameter containing the error message.
+
+#### Example usage
+
+    cordova.plugins.diagnostic.requestIgnoreBatteryOptimizations(function(){
+        console.log("Opened battery optimization exemption request");
+    }, function(error){
+        console.error("The following error occurred: "+error);
     });
 
 ### isAirplaneModeEnabled()

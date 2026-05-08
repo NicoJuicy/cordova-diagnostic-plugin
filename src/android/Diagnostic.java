@@ -46,13 +46,16 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.SharedPreferences;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.PowerManager;
 import android.util.Log;
 
 import android.content.Context;
@@ -263,6 +266,7 @@ public class Diagnostic extends CordovaPlugin{
 
     protected SharedPreferences sharedPref;
     protected SharedPreferences.Editor editor;
+    protected boolean currentLowPowerModeEnabled = false;
 
     /*************
      * Public API
@@ -291,8 +295,29 @@ public class Diagnostic extends CordovaPlugin{
         applicationContext = this.cordova.getActivity().getApplicationContext();
         sharedPref = cordova.getActivity().getSharedPreferences(TAG, Activity.MODE_PRIVATE);
         editor = sharedPref.edit();
+        currentLowPowerModeEnabled = isLowPowerModeEnabled();
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            try {
+                applicationContext.registerReceiver(lowPowerModeChangedReceiver, new IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED));
+            } catch (Exception e) {
+                logWarning("Unable to register low power mode change receiver: " + e.getMessage());
+            }
+        }
 
         super.initialize(cordova, webView);
+    }
+
+    @Override
+    public void onDestroy() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            try {
+                applicationContext.unregisterReceiver(lowPowerModeChangedReceiver);
+            } catch (Exception e) {
+                logWarning("Unable to unregister low power mode change receiver: " + e.getMessage());
+            }
+        }
+        super.onDestroy();
     }
 
     /**
@@ -351,6 +376,8 @@ public class Diagnostic extends CordovaPlugin{
                 callbackContext.success(getCPUArchitecture());
             } else if(action.equals("getCurrentBatteryLevel")) {
                 callbackContext.success(getCurrentBatteryLevel());
+            } else if(action.equals("isLowPowerModeEnabled")) {
+                callbackContext.success(isLowPowerModeEnabled() ? 1 : 0);
             } else if(action.equals("isAirplaneModeEnabled")) {
                 callbackContext.success(isAirplaneModeEnabled() ? 1 : 0);
             } else if(action.equals("getDeviceOSVersion")) {
@@ -861,6 +888,17 @@ public class Diagnostic extends CordovaPlugin{
         executeGlobalJavascript("cordova.plugins.diagnostic." + jsString);
     }
 
+    protected final BroadcastReceiver lowPowerModeChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(instance != null && PowerManager.ACTION_POWER_SAVE_MODE_CHANGED.equals(action)){
+                Log.v(TAG, "lowPowerModeChangedReceiver");
+                instance.notifyLowPowerModeChange();
+            }
+        }
+    };
+
     /**
      * Performs a warm app restart - restarts only Cordova main activity
      */
@@ -951,6 +989,23 @@ public class Diagnostic extends CordovaPlugin{
     protected int getCurrentBatteryLevel(){
         BatteryManager bm = (BatteryManager) cordova.getContext().getApplicationContext().getSystemService(BATTERY_SERVICE);
         return bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+    }
+
+    protected boolean isLowPowerModeEnabled(){
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
+            return false;
+        }
+        PowerManager powerManager = (PowerManager) cordova.getContext().getApplicationContext().getSystemService(Context.POWER_SERVICE);
+        return powerManager != null && powerManager.isPowerSaveMode();
+    }
+
+    protected void notifyLowPowerModeChange(){
+        boolean lowPowerModeEnabled = isLowPowerModeEnabled();
+        if(lowPowerModeEnabled != currentLowPowerModeEnabled){
+            currentLowPowerModeEnabled = lowPowerModeEnabled;
+            logDebug("Low power mode changed to: " + lowPowerModeEnabled);
+            executePluginJavascript("_onLowPowerModeChange(" + (lowPowerModeEnabled ? "true" : "false") + ");");
+        }
     }
 
     // https://stackoverflow.com/a/18237962/777265

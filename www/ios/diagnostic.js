@@ -155,6 +155,32 @@ var Diagnostic = (function(){
     };
 
     /**
+     * Checks if low power mode is currently enabled on device.
+     *
+     * @param {Function} successCallback -  The callback which will be called when the operation is successful.
+     * This callback function is passed a single boolean parameter which is TRUE if low power mode is enabled.
+     * @param {Function} errorCallback -  The callback which will be called when the operation encounters an error.
+     *  This callback function is passed a single string parameter containing the error message.
+     */
+    Diagnostic.isLowPowerModeEnabled = function(successCallback, errorCallback){
+        return cordova.exec(Diagnostic._ensureBoolean(successCallback),
+            errorCallback,
+            'Diagnostic',
+            'isLowPowerModeEnabled',
+            []);
+    };
+
+    /**
+     * Registers a function to be called when the device low power mode changes.
+     *
+     * @param {Function} successCallback - The callback which will be called when low power mode changes.
+     * This callback function is passed a single boolean parameter which is TRUE if low power mode is enabled.
+     */
+    Diagnostic.onLowPowerModeChange = function(successCallback) {
+        Diagnostic._onLowPowerModeChange = successCallback || function(){};
+    };
+
+    /**
      * Checks if mobile data is authorized for this app.
      * Returns true if the per-app Mobile Data setting is set to enabled (regardless of whether the device is currently connected to a cellular network)
      *
@@ -1228,7 +1254,7 @@ var Diagnostic = (function(){
         }
     };
 
-
+    Diagnostic._onLowPowerModeChange = function(){};
 
     return Diagnostic;
 })();

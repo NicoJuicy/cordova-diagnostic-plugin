@@ -28,6 +28,7 @@ extern NSString*const AUTHORIZATION_LIMITED;
 
 @property (nonatomic) float osVersion;
 @property (nonatomic) BOOL debugEnabled;
+@property (nonatomic, strong) id lowPowerModeChangeObserver;
 
 // Plugin API
 - (void) enableDebug: (CDVInvokedUrlCommand*)command;
@@ -35,6 +36,7 @@ extern NSString*const AUTHORIZATION_LIMITED;
 - (void) getBackgroundRefreshStatus: (CDVInvokedUrlCommand*)command;
 - (void) getArchitecture: (CDVInvokedUrlCommand*)command;
 - (void) getCurrentBatteryLevel: (CDVInvokedUrlCommand*)command;
+- (void) isLowPowerModeEnabled: (CDVInvokedUrlCommand*)command;
 - (void) getDeviceOSVersion: (CDVInvokedUrlCommand*)command;
 - (void) getBuildOSVersion: (CDVInvokedUrlCommand*)command;
 - (void) isMobileDataAuthorized: (CDVInvokedUrlCommand*)command;

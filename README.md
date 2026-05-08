@@ -78,21 +78,23 @@ Cordova diagnostic plugin [![Latest Stable Version](https://img.shields.io/npm/v
     - [getCurrentBatteryLevel()](#getcurrentbatterylevel)
       - [Parameters](#parameters-14)
       - [Example usage](#example-usage-16)
+        - [isLowPowerModeEnabled()](#islowpowermodeenabled)
+        - [onLowPowerModeChange()](#onlowpowermodechange)
     - [isAirplaneModeEnabled()](#isairplanemodeenabled)
-      - [Parameters](#parameters-15)
-      - [Example usage](#example-usage-17)
+            - [Parameters](#parameters-15)
+            - [Example usage](#example-usage-17)
     - [isMobileDataEnabled()](#ismobiledataenabled)
-      - [Parameters](#parameters-16)
-      - [Example usage](#example-usage-18)
+            - [Parameters](#parameters-16)
+            - [Example usage](#example-usage-18)
     - [isMobileDataAuthorized()](#ismobiledataauthorized)
-      - [Parameters](#parameters-17)
-      - [Example usage](#example-usage-19)
+            - [Parameters](#parameters-17)
+            - [Example usage](#example-usage-19)
     - [isAccessibilityModeEnabled()](#isaccessibilitymodeenabled)
-      - [Parameters](#parameters-18)
-      - [Example usage](#example-usage-20)
+            - [Parameters](#parameters-18)
+            - [Example usage](#example-usage-20)
     - [isTouchExplorationEnabled()](#istouchexplorationenabled)
-      - [Parameters](#parameters-19)
-      - [Example usage](#example-usage-21)
+            - [Parameters](#parameters-19)
+            - [Example usage](#example-usage-21)
     - [getDeviceOSVersion()](#getdeviceosversion)
       - [Parameters](#parameters-20)
       - [Example usage](#example-usage-22)
@@ -1140,6 +1142,48 @@ The function is passed a single `string` parameter containing the error message.
 
     cordova.plugins.diagnostic.getCurrentBatteryLevel(function(level){
         console.log(`Current battery level is ${level}%`);
+    });
+
+### isLowPowerModeEnabled()
+
+Platforms: Android and iOS
+
+Checks if low power mode is currently enabled on the device.
+
+    cordova.plugins.diagnostic.isLowPowerModeEnabled(successCallback, errorCallback);
+
+#### Parameters
+
+- {Function} successCallback -  The callback which will be called when operation is successful.
+The function is passed a single boolean parameter which is TRUE if low power mode is enabled.
+- {Function} errorCallback -  The callback which will be called when operation encounters an error.
+The function is passed a single string parameter containing the error message.
+
+#### Example usage
+
+    cordova.plugins.diagnostic.isLowPowerModeEnabled(function(enabled){
+        console.log(`Low power mode is currently ${enabled ? 'enabled' : 'disabled'}`);
+    }, function(error){
+        console.error("The following error occurred: "+error);
+    });
+
+### onLowPowerModeChange()
+
+Platforms: Android and iOS
+
+Registers a callback function to be called whenever the device low power mode status changes.
+
+    cordova.plugins.diagnostic.onLowPowerModeChange(callback);
+
+#### Parameters
+
+- {Function} callback - The callback which will be called whenever low power mode changes.
+The function is passed a single boolean parameter which is TRUE if low power mode is enabled.
+
+#### Example usage
+
+    cordova.plugins.diagnostic.onLowPowerModeChange(function(enabled){
+        console.log(`Low power mode changed: ${enabled ? 'enabled' : 'disabled'}`);
     });
 
 ### isAirplaneModeEnabled()

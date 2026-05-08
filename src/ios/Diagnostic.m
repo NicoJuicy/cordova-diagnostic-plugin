@@ -41,6 +41,7 @@ static Diagnostic* diagnostic = nil;
 static CTCellularData* cellularData;
 #endif
 
+
 /********************************/
 #pragma mark - Public static functions
 /********************************/
@@ -126,6 +127,12 @@ static CTCellularData* cellularData;
     #if !TARGET_OS_MACCATALYST
         cellularData = [[CTCellularData alloc] init];
     #endif
+
+    self.lowPowerModeChangeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:NSProcessInfoPowerStateDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
+        BOOL isLowPowerModeEnabled = [[NSProcessInfo processInfo] isLowPowerModeEnabled];
+        [self logDebug:[NSString stringWithFormat:@"Low power mode changed to: %@", isLowPowerModeEnabled ? @"true" : @"false"]];
+        [self executeGlobalJavascript:[NSString stringWithFormat:@"cordova.plugins.diagnostic._onLowPowerModeChange(%@);", isLowPowerModeEnabled ? @"true" : @"false"]];
+    }];
 }
 
 // https://stackoverflow.com/a/38441011/777265
@@ -180,6 +187,18 @@ static CTCellularData* cellularData;
             [self logDebug:[NSString stringWithFormat:@"Battery level: %d", batteryLevel]];
             [self sendPluginResultInt:batteryLevel:command];
             [currentDevice setBatteryMonitoringEnabled:false];
+        }@catch (NSException *exception) {
+            [self handlePluginException:exception :command];
+        }
+    }];
+}
+
+- (void) isLowPowerModeEnabled: (CDVInvokedUrlCommand*)command {
+    [self.commandDelegate runInBackground:^{
+        @try {
+            BOOL isLowPowerModeEnabled = [[NSProcessInfo processInfo] isLowPowerModeEnabled];
+            [self logDebug:[NSString stringWithFormat:@"Low power mode enabled: %@", isLowPowerModeEnabled ? @"true" : @"false"]];
+            [self sendPluginResultBool:isLowPowerModeEnabled :command];
         }@catch (NSException *exception) {
             [self handlePluginException:exception :command];
         }
@@ -417,6 +436,13 @@ static CTCellularData* cellularData;
 - (id) getSetting: (NSString*) key
 {
     return [[NSUserDefaults standardUserDefaults] objectForKey:key];
+}
+
+- (void)dealloc {
+    if(self.lowPowerModeChangeObserver != nil){
+        [[NSNotificationCenter defaultCenter] removeObserver:self.lowPowerModeChangeObserver];
+        self.lowPowerModeChangeObserver = nil;
+    }
 }
 
 @end

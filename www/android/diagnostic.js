@@ -112,7 +112,8 @@ var Diagnostic = (function(){
      *
      ****************************/
     // Placeholder listeners
-    Diagnostic._onNFCStateChange =
+    Diagnostic._onLowPowerModeChange =
+        Diagnostic._onNFCStateChange =
         Diagnostic._onPermissionRequestComplete = function(){};
 
     Diagnostic._combinePermissionStatuses = function(statuses){
@@ -482,6 +483,32 @@ var Diagnostic = (function(){
             'Diagnostic',
             'getCurrentBatteryLevel',
             []);
+    };
+
+    /**
+     * Checks if low power mode is currently enabled on device.
+     *
+     * @param {Function} successCallback -  The callback which will be called when the operation is successful.
+     * This callback function is passed a single boolean parameter which is TRUE if low power mode is enabled.
+     * @param {Function} errorCallback -  The callback which will be called when the operation encounters an error.
+     *  This callback function is passed a single string parameter containing the error message.
+     */
+    Diagnostic.isLowPowerModeEnabled = function(successCallback, errorCallback){
+        return cordova.exec(Diagnostic._ensureBoolean(successCallback),
+            errorCallback,
+            'Diagnostic',
+            'isLowPowerModeEnabled',
+            []);
+    };
+
+    /**
+     * Registers a function to be called when the device low power mode changes.
+     *
+     * @param {Function} successCallback - The callback which will be called when low power mode changes.
+     * This callback function is passed a single boolean parameter which is TRUE if low power mode is enabled.
+     */
+    Diagnostic.onLowPowerModeChange = function(successCallback) {
+        Diagnostic._onLowPowerModeChange = successCallback || function(){};
     };
 
     /**

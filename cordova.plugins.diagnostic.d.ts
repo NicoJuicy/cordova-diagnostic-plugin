@@ -742,6 +742,24 @@ interface Diagnostic {
     ) => void;
 
     /**
+     * Checks if low power mode is currently enabled on the device.
+     * @param successCallback
+     * @param errorCallback
+     */
+    isLowPowerModeEnabled?: (
+        successCallback: (enabled: boolean) => void,
+        errorCallback: (error: string) => void
+    ) => void;
+
+    /**
+     * Registers a function to be called when low power mode changes.
+     * @param successCallback
+     */
+    onLowPowerModeChange?: (
+        successCallback: (enabled: boolean) => void
+    ) => void;
+
+    /**
      * ANDROID ONLY
      * Checks if high-accuracy locations are available to the app from GPS hardware.
      * Returns true if Location mode is enabled and is set to "Device only" or "High accuracy" AND if the app is authorised to use location.

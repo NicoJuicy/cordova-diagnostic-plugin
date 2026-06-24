@@ -4231,6 +4231,7 @@ The plugin defines all [dangerous permissions](http://developer.android.com/guid
 - `cordova.plugins.diagnostic.permission.ACCESS_BACKGROUND_LOCATION`
 - `cordova.plugins.diagnostic.permission.ACCESS_COARSE_LOCATION`
 - `cordova.plugins.diagnostic.permission.ACCESS_FINE_LOCATION`
+- `cordova.plugins.diagnostic.permission.ACCESS_LOCAL_NETWORK`
 - `cordova.plugins.diagnostic.permission.ACCESS_MEDIA_LOCATION`
 - `cordova.plugins.diagnostic.permission.ACTIVITY_RECOGNITION`
 - `cordova.plugins.diagnostic.permission.ADD_VOICEMAIL`
@@ -4246,6 +4247,7 @@ The plugin defines all [dangerous permissions](http://developer.android.com/guid
 - `cordova.plugins.diagnostic.permission.NEARBY_WIFI_DEVICES`
 - `cordova.plugins.diagnostic.permission.POST_NOTIFICATIONS`
 - `cordova.plugins.diagnostic.permission.PROCESS_OUTGOING_CALLS`
+- `cordova.plugins.diagnostic.permission.RANGING`
 - `cordova.plugins.diagnostic.permission.READ_CALENDAR`
 - `cordova.plugins.diagnostic.permission.READ_CALL_LOG`
 - `cordova.plugins.diagnostic.permission.READ_CONTACTS`
@@ -4253,6 +4255,7 @@ The plugin defines all [dangerous permissions](http://developer.android.com/guid
 - `cordova.plugins.diagnostic.permission.READ_MEDIA_AUDIO`
 - `cordova.plugins.diagnostic.permission.READ_MEDIA_IMAGES`
 - `cordova.plugins.diagnostic.permission.READ_MEDIA_VIDEO`
+- `cordova.plugins.diagnostic.permission.READ_MEDIA_VISUAL_USER_SELECTED`
 - `cordova.plugins.diagnostic.permission.READ_PHONE_NUMBERS`
 - `cordova.plugins.diagnostic.permission.READ_PHONE_STATE`
 - `cordova.plugins.diagnostic.permission.READ_SMS`

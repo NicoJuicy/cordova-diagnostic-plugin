@@ -149,6 +149,12 @@ public class Diagnostic extends CordovaPlugin{
         // API 34+
         Diagnostic.addBiDirMapEntry(_permissionsMap, "READ_MEDIA_VISUAL_USER_SELECTED", "android.permission.READ_MEDIA_VISUAL_USER_SELECTED");
 
+        // API 36+
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "RANGING", "android.permission.RANGING");
+
+        // API 37+
+        Diagnostic.addBiDirMapEntry(_permissionsMap, "ACCESS_LOCAL_NETWORK", "android.permission.ACCESS_LOCAL_NETWORK");
+
         permissionsMap = Collections.unmodifiableMap(_permissionsMap);
     }
 

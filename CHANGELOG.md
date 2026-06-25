@@ -1,5 +1,8 @@
 # CHANGELOG
 
+**v7.3.1**
+* (android) add explicit support for runtime permissions up to API 37
+
 **v7.3.0**
 * (ios & android) feat: add `isLowPowerModeEnabled()` and `onLowPowerModeChange()` to core module to check if low power mode is enabled on the device.
 * (android) feat: add `isIgnoringBatteryOptimizations()` and `requestIgnoreBatteryOptimizations()` to core module to check if the app is ignoring battery optimizations and request to be added to the ignore list.
